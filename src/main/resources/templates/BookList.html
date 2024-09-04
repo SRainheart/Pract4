@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Книги</title>
+</head>
+<body>
+<h1>Список книг</h1>
+<h3>Добавить книгу</h3>
+<form action="/book/add" method="post">
+  <input type="text" name="name" placeholder="Имя" required>
+  <input type="text" name="author" placeholder="Автор" required>
+  <input type="number" name="price" placeholder="Цена" required>
+  <button type="submit">Добавить книгу</button>
+</form>
+<h2>Все книги:</h2>
+<ul>
+  <th:block th:each="student : ${books}"> <!--цикл в котором происходит вывод всех студентов -->
+    <li>
+      <span th:text="${student.name} + ' ' + ${student.author} + ' ' + ${student.price}"></span>
+      <form action="/book/update" method="post" style="display: inline;">
+        <input type="hidden" name="id" th:value="${student.id}">
+        <input type="text" name="name" placeholder="Название книги" required>
+        <input type="text" name="author" placeholder="Автор" required>
+        <input type="number" name="price" placeholder="Цена" required>
+        <button type="submit">Обновить</button>
+      </form>
+      <form action="/book/delete" method="post" style="display: inline;">
+        <input type="hidden" name="id" th:value="${student.id}" placeholder="Найти по id">
+        <button type="submit">Удалить</button>
+      </form>
+    </li>
+  </th:block>
+</ul>
+</body>
+</html>

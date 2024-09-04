@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Транспорт</title>
+</head>
+<body>
+<h1>Список транспорта</h1>
+<h3>Добавить транспорт</h3>
+<form action="/tran/add" method="post">
+  <input type="text" name="name" placeholder="Имя" required>
+  <input type="text" name="type" placeholder="Тип транспорта" required>
+  <button type="submit">Добавить транспорт</button>
+</form>
+<h2>Все транспорты:</h2>
+<ul>
+  <th:block th:each="student : ${transports}"> <!--цикл в котором происходит вывод всех студентов -->
+    <li>
+        <span th:text="${student.name} + ' ' + ${student.type}"></span>
+        <form action="/tran/update" method="post" style="display: inline;">
+          <input type="hidden" name="id" th:value="${student.id}">
+          <input type="text" name="name" placeholder="Название транспорта" required>
+          <input type="text" name="type" placeholder="Тип транспорта" required>
+          <button type="submit">Обновить</button>
+        </form>
+        <form action="/tran/delete" method="post" style="display: inline;">
+          <input type="hidden" name="id" th:value="${student.id}" placeholder="Найти по id">
+          <button type="submit">Удалить</button>
+        </form>
+    </li>
+  </th:block>
+</ul>
+</body>
+</html>

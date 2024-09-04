@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Студенты</title>
+</head>
+<body>
+<h1>Список студентов</h1>
+<h3>Добавить студента</h3>
+<form action="/students/add" method="post">
+  <input type="text" name="name" placeholder="Имя" required>
+  <input type="number" name="age" placeholder="Возраст" required>
+  <input type="text" name="lastname" placeholder="Фамилия" required>
+  <input type="text" name="middlename" placeholder="Отчество" required>
+  <button type="submit">Добавить студента</button>
+</form>
+<h3>Поиск студентов</h3>
+<form action="/students/id" method="post">
+  <input type="number" name="id" placeholder="Найти по id" required>
+  <button type="submit">Найти</button>
+</form>
+<h3>Фильтрация студентов</h3>
+<form action="/student/filterStudentDelTwo" method="post">
+  <button type="submit">Отфильтровать</button>
+</form>
+<h3>Удаление студентов</h3>
+<form action="/student/deleteAll" method="post">
+  <button type="submit">Удалить всех студентов</button>
+</form>
+<h2>Все студенты:</h2>
+<ul>
+  <th:block th:each="student : ${students}"> <!--цикл в котором происходит вывод всех студентов -->
+    <li>
+      <th:block th:if="${student.delete == false}">
+        <span th:text="${student.name} + ' ' + ${student.age} + ' ' + ${student.lastName} + ' ' + ${student.middleName}"></span>
+        <form action="/students/update" method="post" style="display: inline;">
+          <input type="hidden" name="id" th:value="${student.id}">
+          <input type="text" name="name" placeholder="Имя" required>
+          <input type="number" name="age" placeholder="Возраст" required>
+          <input type="text" name="lastname" placeholder="Фамилия" required>
+          <input type="text" name="middlename" placeholder="Отчество" required>
+          <button type="submit">Обновить</button>
+        </form>
+        <form action="/students/delete" method="post" style="display: inline;">
+          <input type="hidden" name="id" th:value="${student.id}" placeholder="Найти по id">
+          <button type="submit">Удалить</button>
+        </form>
+        <form action="/student/IsDeleteTrue" method="post" style="display: inline;">
+          <input type="hidden" name="id" th:value="${student.id}">
+          <input type="hidden" name="name" th:value="${student.name}">
+          <input type="hidden" name="age" th:value="${student.age}">
+          <input type="hidden" name="lastname" th:value="${student.lastName}">
+          <input type="hidden" name="middlename" th:value="${student.middleName}">
+          <button type="submit">Удалить логически</button>
+        </form>
+      </th:block>
+    </li>
+  </th:block>
+</ul>
+</body>
+</html>
