@@ -3,57 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <title>Студенты</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-<h1>Список студентов</h1>
-<h3>Добавить студента</h3>
-<form action="/students/add" method="post">
-  <input type="text" name="name" placeholder="Имя" required>
-  <input type="number" name="age" placeholder="Возраст" required>
-  <input type="text" name="lastname" placeholder="Фамилия" required>
-  <input type="text" name="middlename" placeholder="Отчество" required>
-  <button type="submit">Добавить студента</button>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<a href="/logout">Выйти из аккаунта</a>
+<h1 align="center">Список студентов</h1>
+<h3 align="center">Добавить студента</h3>
+<form action="#" th:action="@{/admin/students/add}" method="post" th:object="${student}">
+  <div align="center">
+    <input type="text" th:field="*{name}" placeholder="Имя" required>
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+    <input type="number" th:field="*{age}" placeholder="Возраст" required>
+    <p th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></p>
+    <input type="text" th:field="*{lastName}" placeholder="Фамилия" required>
+    <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+    <input type="text" th:field="*{middleName}" placeholder="Отчество" required>
+    <p th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}"></p>
+    <br>
+    <b><p th:text="${message}" style="color: red"></p></b>
+    <button class="btn btn-success" type="submit">Добавить студента</button>
+  </div>
 </form>
-<h3>Поиск студентов</h3>
-<form action="/students/id" method="post">
-  <input type="number" name="id" placeholder="Найти по id" required>
-  <button type="submit">Найти</button>
+<h3 align="center">Поиск студентов</h3>
+<form action="#" th:action="@{/user/students/id}" method="post">
+  <div align="center">
+    <input type="text" name="id" placeholder="Найти по фамилии" required>
+    <button class="btn btn-secondary" type="submit">Найти</button>
+  </div>
 </form>
-<h3>Фильтрация студентов</h3>
-<form action="/student/filterStudentDelTwo" method="post">
-  <button type="submit">Отфильтровать</button>
-</form>
+<h3 align="center">Фильтрация студентов</h3>
+<div align="center">
+  <form action="#" th:action="@{/user/student/filterStudentDelTwo}" method="post" style="display: inline">
+    <button class="btn btn-light" type="submit">Совершенно-летние студенты</button>
+  </form>
+  <form action="#" th:action="@{/user/student/filterStudentNot}" method="post" style="display: inline">
+    <button class="btn btn-light" type="submit">Не совершенно-летние студенты</button>
+  </form>
+  <form action="#" th:action="@{/user/student/filterStudentSort}" method="post" style="display: inline">
+    <button class="btn btn-light" type="submit">По алфавиту</button>
+  </form>
+</div>
 <h3>Удаление студентов</h3>
-<form action="/student/deleteAll" method="post">
-  <button type="submit">Удалить всех студентов</button>
+<form action="#" th:action="@{/admin/student/deleteAll}" method="post">
+  <button class="btn btn-danger" type="submit">Удалить всех студентов</button>
 </form>
 <h2>Все студенты:</h2>
 <ul>
   <th:block th:each="student : ${students}"> <!--цикл в котором происходит вывод всех студентов -->
     <li>
+      \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+      <br>
       <th:block th:if="${student.delete == false}">
         <span th:text="${student.name} + ' ' + ${student.age} + ' ' + ${student.lastName} + ' ' + ${student.middleName}"></span>
-        <form action="/students/update" method="post" style="display: inline;">
+        <form action="#" th:action="@{/admin/students/update/{id}(id=${student.id})}" method="post" th:object="${student}" style="display: inline;">
           <input type="hidden" name="id" th:value="${student.id}">
           <input type="text" name="name" placeholder="Имя" required>
           <input type="number" name="age" placeholder="Возраст" required>
-          <input type="text" name="lastname" placeholder="Фамилия" required>
-          <input type="text" name="middlename" placeholder="Отчество" required>
-          <button type="submit">Обновить</button>
+          <input type="text" name="LastName" placeholder="Фамилия" required>
+          <input type="text" name="MiddleName" placeholder="Отчество" required>
+          <button class="btn btn-warning" type="submit">Обновить</button>
+          <b><p th:text="${up_message}" style="color: red"></p></b>
         </form>
-        <form action="/students/delete" method="post" style="display: inline;">
-          <input type="hidden" name="id" th:value="${student.id}" placeholder="Найти по id">
-          <button type="submit">Удалить</button>
+        <form action="#" th:action="@{/admin/students/delete/{id}(id=${student.id})}" method="post" style="display: inline;" >
+          <input type="hidden" name="id" th:value="${student.id}">
+          <button class="btn btn-danger" type="submit">Удалить</button>
         </form>
-        <form action="/student/IsDeleteTrue" method="post" style="display: inline;">
+        <form action="#" th:action="@{/admin/student/IsDeleteTrue/{id}(id=${student.id})}" method="post" style="display: inline;">
           <input type="hidden" name="id" th:value="${student.id}">
           <input type="hidden" name="name" th:value="${student.name}">
           <input type="hidden" name="age" th:value="${student.age}">
-          <input type="hidden" name="lastname" th:value="${student.lastName}">
-          <input type="hidden" name="middlename" th:value="${student.middleName}">
-          <button type="submit">Удалить логически</button>
+          <input type="hidden" name="LastName" th:value="${student.lastName}">
+          <input type="hidden" name="MiddleName" th:value="${student.middleName}">
+          <button class="btn btn-primary" type="submit">Удалить логически</button>
         </form>
       </th:block>
+      <br>
+      //////////////////////////////////////////
     </li>
   </th:block>
 </ul>

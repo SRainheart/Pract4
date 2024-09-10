@@ -4,24 +4,34 @@ import com.example.pract2.model.StudentModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+
+///
+// файл не используеться
+///
 
 @Repository
 //Репозиторий отвечает за хранение и управление данными студентов в памяти. Он предоставляет методы для выполнения операций(обычные CRUD действия с данными)
 
 public class InMemoryStudentRepository {
     private final List<StudentModel> STUDENT = new ArrayList<>();
-    private AtomicInteger idCounter = new AtomicInteger(0);// Генерация уникального ID
-
     public List<StudentModel> findAllStudents() {//Вывод всех студентов
         return STUDENT;
     }
-
+    public StudentModel findStudentById(Long id) {
+        return STUDENT
+                .stream()
+                .filter(element -> element.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
     public StudentModel addStudent(StudentModel student){// Добавление студента
-        student.setId(idCounter.getAndIncrement());// Установка уникального ID
         STUDENT.add(student);
         return student;
     }
@@ -36,15 +46,17 @@ public class InMemoryStudentRepository {
         return null;// Студент не найден
     }
 
-    public void deleteStudent(int id){ // Удаление студента по id
-        STUDENT.removeIf(studentModel -> studentModel.getId() == id);
+    public void deleteStudent(Long id){ // Удаление студента по id
+        var student = findStudentById(id);
+        if (student != null){
+            STUDENT.remove(student);
+        }
     }
 
-    public StudentModel findStudentById(int id){//поиск по id
+    public List<StudentModel> findStudentByName(String lastname){//поиск по id
         return STUDENT.stream()
-                .filter(studentModel -> studentModel.getId() == id)
-                .findFirst()
-                .orElse(null);
+                .filter(studentModel -> studentModel.getLastName().equals(lastname))
+                .collect(Collectors.toList());
     }
 
     public void deleteStudentAll(){//очищение всего списка, по факту множественное удалени
@@ -64,5 +76,14 @@ public class InMemoryStudentRepository {
 
     public List<StudentModel> filterStudentDelTwo(){//фильтрация
         return STUDENT.stream().filter(studentModel -> studentModel.getAge() >= 18).collect(Collectors.toList());
+    }
+
+    public List<StudentModel> filterStudentNo18(){
+        return STUDENT.stream().filter(studentModel -> studentModel.getAge() < 18).collect(Collectors.toList());
+    }
+
+    public List<StudentModel> filterStudentAlfavit(){
+        Collections.sort(STUDENT, Comparator.comparing(StudentModel::getLastName));
+        return STUDENT;
     }
 }

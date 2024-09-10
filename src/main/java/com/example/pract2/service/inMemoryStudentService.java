@@ -2,6 +2,7 @@ package com.example.pract2.service;
 
 import com.example.pract2.model.StudentModel;
 import com.example.pract2.repository.InMemoryStudentRepository;
+import com.example.pract2.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,49 +13,39 @@ import java.util.List;
 
 @Service
 public class inMemoryStudentService implements StudentServise {
-    private final InMemoryStudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    public inMemoryStudentService(InMemoryStudentRepository studentRepository) { // Конструктор
+    public inMemoryStudentService(StudentRepository studentRepository) { // Конструктор
         this.studentRepository = studentRepository;
     }
 
     @Override
     public List<StudentModel> findAllStudent() { // Вывод всех студентов
-        return studentRepository.findAllStudents();
+        return studentRepository.findAll();
     }
 
     @Override
     public StudentModel addStudent(StudentModel student) { // Добавление студента
-        return studentRepository.addStudent(student);
+        return studentRepository.save(student);
     }
 
     @Override
     public StudentModel updateStudent(StudentModel student) { // Изменение студента
-        return studentRepository.updateStudent(student);
+        return studentRepository.save(student);
     }
 
     @Override
-    public void deleteStudent(int id) { // Удаление студента
-        studentRepository.deleteStudent(id);
+    public void deleteStudent(Long id) { // Удаление студента
+        studentRepository.deleteById(id);
     }
 
     @Override
-    public StudentModel findStudentById(int id) { // поиск студента по id
-        return studentRepository.findStudentById(id);
-    }
-    @Override
-    public void deleteStudentAll() {// удаление всех сдудентов
-        studentRepository.deleteStudentAll();
+    public void deleteStudentAll() {
+        studentRepository.deleteAll();// удаление всех студентов
     }
 
     @Override
     public StudentModel IsDeleteTrue(StudentModel student) {//логическое удаление
-        return studentRepository.IsDeleteTrue(student);
+        return studentRepository.save(student);
     }
-
-    @Override
-    public List<StudentModel> filterStudentsDelTwo() {//фильтрация
-        return studentRepository.filterStudentDelTwo();
-    }
-
 }
